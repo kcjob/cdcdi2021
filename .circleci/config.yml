@@ -38,6 +38,36 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
 
+  #Test Front-end
+  test-frontend:
+    docker:
+      # Docker image here
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: test front-end
+          command: |
+            cd frontend
+            npm install jest
+            npm run test
+
+  #Test Back-end
+  test-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: test back-end
+          command: |
+            cd backend
+            npm install jest
+            npm run test
 
 
 
@@ -46,3 +76,7 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
