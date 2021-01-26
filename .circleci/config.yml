@@ -81,8 +81,8 @@ jobs:
           name: scan front-end
           command: |
             cd frontend
-            #npm audit fix
-            npm audit --audit-level=critical --force
+            npm audit fix
+            #npm audit --audit-level=critical --force
 
   #Scan Back-end pacakages & security holes
   scan-backend:
@@ -99,6 +99,66 @@ jobs:
             npm audit fix
             #npm audit --audit-level=critical --force
 
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+
+    steps:
+      # Checkout code from git
+      - checkout
+      - run: yum -y install tar gzip jq npm
+      - run: yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm jq
+
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            pwd
+            aws cloudformation deploy \
+            --template-file .circleci/files/backend.yml \
+            --tags Project=udapeople \
+            --stack-name "bckend${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+            --region=us-west-2
+
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            cd ~/project/.circleci/ansible/
+
+            SERVER_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople" --output text)
+
+            echo $SERVER_IP >> inventory.txt
+            cat inventory.txt
+            ls ~/project/backend
+            cp inventory.txt ~/project/backend
+            ls ~/project/backend
+
+      - persist_to_workspace:
+          root: ~/project/
+          paths:
+            - backend/inventory.txt
+
+      #Store
+      - run:
+          name: Backend ID
+          command: |
+            curl -H "Content-Type: text/plain" -H "token: ab-${CIRCLE_WORKFLOW_ID}" --request PUT --data "$serverIP" https://api.memstash.io/values/backendip
+            cat ~/project/.circleci/ansible/inventory.txt
+            pwd
+
+      #Frontend deploy infra
+      - run:
+          name: Ensure front-end infrastructure exist
+          command: |
+            aws cloudformation deploy \
+            --template-file .circleci/files/frontend.yml \
+            --tags Project=udapeople \
+            --stack-name "frntend${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+            --region=us-west-2
+
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment
 
 
 workflows:
@@ -114,3 +174,5 @@ workflows:
           requires: [build-frontend]
       - scan-backend:
           requires: [build-backend]
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
