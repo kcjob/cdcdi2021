@@ -167,7 +167,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["c4:3d:25:f2:2b:19:fa:fc:c3:61:15:47:fc:08:40:6c"]
-      # attach workspace
+
       - attach_workspace:
           at: ~/project/
 
@@ -178,7 +178,7 @@ jobs:
             pip install awscli
             ls -la ~/project
             ls -la ~/project/.circleci/ansible
-            cat ~/project/.circleci/inventory
+            cat ~/project/.circleci/inventory.txt
 
       - run:
           name: configure server
