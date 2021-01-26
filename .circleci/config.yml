@@ -160,6 +160,26 @@ jobs:
       # Here's where you will add some code to rollback on failure
       #- destroy-environment
 
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["c4:3d:25:f2:2b:19:fa:fc:c3:61:15:47:fc:08:40:6c"]
+      # attach workspace
+      - attach_workspace:
+          at: ~/project/
+
+      - run:
+          name: Install dependencies
+          command: |
+            # Your code here
+            pwd
+            cd backend
+            ls -la
+            cat .env
+            #exit 1
 
 
 workflows:
@@ -177,3 +197,5 @@ workflows:
           requires: [build-backend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
