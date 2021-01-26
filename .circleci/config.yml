@@ -129,7 +129,7 @@ jobs:
 
             echo $SERVER_IP >> inventory.txt
             cat inventory.txt
-            ls ~/project/backend
+            ls -la ~/project/backend
             cp inventory.txt ~/project/backend
             ls ~/project/backend
 
@@ -174,10 +174,19 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            # Your code here
+            apk add --update ansible nodejs npm
+            pip install awscli
+            cd ~/project/.circleci/ansible/
             pwd
+            ls -al ~/project/backend
+            cat ~/project/backend/inventory.txt
+
+      - run:
+          name: add values to backend/.env files
+          command: |
+            echo PWD $(pwd)
+            ls -la ~/project/backend
             cd backend
-            ls -la
             cat .env
             #exit 1
 
