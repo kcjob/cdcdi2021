@@ -176,18 +176,15 @@ jobs:
           command: |
             apk add --update ansible nodejs npm
             pip install awscli
-            cd ~/project/.circleci/ansible/
-            pwd
-            ls -al ~/project/backend
-            cat ~/project/backend/inventory.txt
 
       - run:
-          name: add values to backend/.env files
+          name: configure server
           command: |
-            echo PWD $(pwd)
-            ls -la ~/project/backend
-            cd backend
-            cat .env
+            echo NODE_ENV=development >> "backend/.env"
+            cd ~/project/.circleci/ansible
+            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople" --output text >> inventory.txt
+
+            ansible-playbook -i inventory.txt configure-server.yml
             #exit 1
 
 
