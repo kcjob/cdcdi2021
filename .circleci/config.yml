@@ -209,6 +209,7 @@ jobs:
             ls -la ~/project/backend
             cat ~/project/backend/.env
 
+
 #      - run:
 #          name: Run migrations
 #          command: |
