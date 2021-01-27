@@ -202,22 +202,26 @@ jobs:
             sudo apt-get -y -qq update
             sudo apt-get -y -qq install python3
             sudo apt-get -qq install awscli
+            pwd
             cd ~/project/backend
             echo NODE_ENV=development >> .env
 
             ls -la ~/project/.backend
             cat ~/project/backend/.env
 
-      - run:
-          name: Run migrations
-          command: |
-           cd ~/project/backend
-            npm install
-            npm run build
+#      - run:
+#          name: Run migrations
+#          command: |
+#           cd ~/project/backend
+#            npm install
+#            npm run build
 
-            echo 'DUMP MIGRATIONS'
-            echo "PWD: " $(pwd)
-            npm run migrations >> ~/project/backend/migrations_dump.txt
+#            echo 'DUMP MIGRATIONS'
+#            echo "PWD: " $(pwd)
+#            npm run migrations >> ~/project/backend/migrations_dump.txt
+
+#            echo '*****************'
+#            cat migrations_dump.txt
 
 #            exit 1
 
