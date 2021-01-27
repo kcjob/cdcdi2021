@@ -202,16 +202,23 @@ jobs:
             sudo apt-get -y -qq update
             sudo apt-get -y -qq install python3
             sudo apt-get -qq install awscli
-            cd ~/project/.circleci/backend
+            cd ~/project/backend
             echo NODE_ENV=development >> .env
 
-            ls -la ~/project/backend
+            ls -la ~/project/.backend
             cat ~/project/backend/.env
 
-#      - run:
-#          name: Run migrations
-#          command: |
-#            # Your code here
+      - run:
+          name: Run migrations
+          command: |
+           cd ~/project/backend
+            npm install
+            npm run build
+
+            echo 'DUMP MIGRATIONS'
+            echo "PWD: " $(pwd)
+            npm run migrations >> ~/project/backend/migrations_dump.txt
+
 #            exit 1
 
 #      - run:
