@@ -224,8 +224,6 @@ jobs:
             echo '*****************'
             cat migrations_dump.txt
 
-#            exit 1
-
       - run:
           name: Send migration results to memstash
           command: |
@@ -244,8 +242,62 @@ jobs:
               echo "FAIL = 0"
             fi
 
-#            exit 1
      # Here's where you will add some code to rollback on failure
+
+  deploy-frontend:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: |
+            cd ~/project/frontend
+            apk add --no-cache nodejs
+            apk add --no-cache npm
+            apk add --no-cache bash
+            apk add --no-cache curl
+            pip install awscli
+
+      - run:
+          name: Get backend url
+          command: |
+            echo "PWD " $(pwd)
+            ls -la ~/project
+
+            BACKENDIP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text)
+
+            BACKENDDNS=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicDnsName' --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text)
+
+            cd ~/project/frontend
+            touch .env
+            export API_URL="http://${BACKENDIP}:3030"
+            export API_DNS="http://${BACKENDDNS}:3030"
+            echo "${API_URL}" >> .env
+            echo "${API_DNS}" >> .env
+            cat ~/project/frontend/.env
+
+            #npm install webpack-dev-server -g
+            npm install
+            npm run build
+            #npm audit fix --audit-level=critical --force
+            cat ~/project/frontend/.env
+
+            aws s3 cp ~/project/frontend/dist s3://udapeople-"${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+      # Here's where you will add some code to rollback on failure
+      #- destroy-environment
+      #- revert-migrations
+
+
+
+
+      - run:
+          name: Deploy frontend objects
+          command: |
+            # your code here
+      # Here's where you will add some code to rollback on failure
+
 
 
 workflows:
