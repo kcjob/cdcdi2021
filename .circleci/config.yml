@@ -206,7 +206,7 @@ jobs:
             cd ~/project/backend
             echo NODE_ENV=development >> .env
 
-            ls -la ~/project/.backend
+            ls -la ~/project/backend
             cat ~/project/backend/.env
 
 #      - run:
