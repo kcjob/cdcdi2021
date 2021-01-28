@@ -322,6 +322,7 @@ jobs:
 
       - run:
           name: Deploy backend
+          no_output_timeout: 10m
           command: |
             printenv >> ~/project/backend/.env
             #cat ~/project/backend/.env
