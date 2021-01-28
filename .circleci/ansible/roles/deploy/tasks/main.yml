@@ -26,7 +26,7 @@
   become: true
   shell: |
     cd /home/ubuntu/backend
-    npm run build
+    sudo npm run build
 
 - name: Executing node
   become: true
