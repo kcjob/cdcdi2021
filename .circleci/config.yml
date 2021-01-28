@@ -332,7 +332,7 @@ jobs:
             cd ~/project/.circleci/ansible
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople" --output text >> inventory.txt
             cat /root/project/.circleci/ansible/inventory.txt
-            ansible-playbook -i /root/project/.circleci/ansible/inventory.txt /root/project/.circleci/ansible/deploy-backend.yml
+            ansible-playbook -i inventory.txt deploy-backend.yml
 
       # Here's where you will add some code to rollback on failure
       #- destroy-environment
