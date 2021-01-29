@@ -9,13 +9,13 @@
     tar -xvzf backend.tgz
 
 - name: "Update npm"
-  become: true
+  #become: true
   shell: |
     cd /home/ubuntu/backend
     npm install -g npm@latest
 
 - name: "install package dependencies"
-  become: true
+  #become: true
   shell: |
     cd /home/ubuntu/backend
     ls -la
@@ -23,13 +23,13 @@
     npm audit fix --audit-level=critical --force
 
 - name: "build package"
-  become: true
+  #become: true
   shell: |
     cd /home/ubuntu/backend
     npm run build
 
 - name: Executing node
-  become: true
+  #become: true
   shell: |
     cd /home/ubuntu/backend
     pm2 start npm --name backend -- start
