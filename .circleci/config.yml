@@ -419,6 +419,32 @@ jobs:
       #- destroy-environment
       #- revert-migrations
 
+  cleanup:
+    docker:
+      # Docker image here
+      - image: amazon/aws-cli 
+    steps:
+      - checkout
+
+      - run: yum -y install tar gzip jq npm
+      - run: yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm jq
+
+      - run:
+          name: Get old stack workflow id and remove old stacks
+          command: |
+  
+            export OLDWORKFLOWID=$(aws cloudformation list-exports --query "Exports[?Name=='WorkflowID'].Value" --no-paginate --output text)
+            echo "oldworkflowID: " ${OLDWORKFLOWID}
+
+            export MYSTACKS=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
+            echo "STACKS: " ${MYSTACKS}
+
+            if [[ "${MYSTACKS[@]}" =~ "${OLDWORKFLOWID}" ]]
+            then
+              aws s3 rm "s3://udapeople-${OLDWORKFLOWID}" --recursive
+              aws cloudformation delete-stack --stack-name bckend${OLDWORKFLOWID}
+              aws cloudformation delete-stack --stack-name frntend${OLDWORKFLOWID}
+            fi
 
 
 workflows:
@@ -448,5 +474,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      #- cleanup:
-      #    requires: [cloudfront-update]
+      - cleanup:
+          requires: [cloudfront-update]
