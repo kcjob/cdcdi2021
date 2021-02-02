@@ -98,7 +98,7 @@ jobs:
             cd backend
             npm audit fix
             npm audit --audit-level=critical --force
-            exit 1
+            
 
 
   deploy-infrastructure:
