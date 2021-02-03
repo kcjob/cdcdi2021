@@ -12,7 +12,7 @@
   become: true
   shell: |
     cd /home/ubuntu/backend
-    npm install -g npm@latest
+    npm install -g npm@6.13.4
 
 - name: "install package dependencies"
   #become: true
