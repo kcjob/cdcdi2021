@@ -32,6 +32,7 @@ jobs:
           command: |
              cd backend
              npm install -qq package.json
+             npm audit fix --audit-level=critical --force
              npm install -qq
              npm run build -qq
       - save_cache:
@@ -82,7 +83,7 @@ jobs:
           command: |
             cd frontend
             npm audit fix
-            #npm audit --audit-level=critical --force
+            #npm audit fix --audit-level=critical --force
 
   #Scan Back-end pacakages & security holes
   scan-backend:
@@ -96,8 +97,7 @@ jobs:
           name: scan back-end dependencies
           command: |
             cd backend
-            npm audit fix
-            npm audit --audit-level=critical --force
+            npm audit fix --audit-level=critical --force
             
 
 workflows:
