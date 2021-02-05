@@ -270,9 +270,9 @@ jobs:
           name: Run migrations
           command: |
            cd ~/project/backend
-            npm install
-            npm audit fix --audit-level=critical --force
-            npm run build
+            #npm install
+            #npm audit fix --audit-level=critical --force
+            #npm run build
 
             echo 'DUMP MIGRATIONS'
             echo "PWD: " $(pwd)
@@ -318,6 +318,7 @@ jobs:
             apk add --no-cache bash
             apk add --no-cache curl
             pip install awscli
+            exit 1
 
       - run:
           name: Get backend url
@@ -345,8 +346,8 @@ jobs:
             cat ~/project/frontend/.env
 
       # Here's where you will add some code to rollback on failure
-      #- destroy-environment
-      #- revert-migrations
+      - destroy-environment
+      - revert-migrations
 
   deploy-backend:
     docker:
