@@ -245,9 +245,12 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0 #12.18.4
+      - image: circleci/node:12.18.4
     steps:
       - checkout
+
+      - restore_cache:
+          keys: [backend-build]
 
       - run:
           name: install awscli and python3
@@ -257,7 +260,7 @@ jobs:
             sudo apt-get -qq install awscli
             pwd
             cd ~/project/backend
-            echo NODE_ENV=development >> .env
+            echo NODE_ENV=production >> .env
 
             ls -la ~/project/backend
             cat ~/project/backend/.env
