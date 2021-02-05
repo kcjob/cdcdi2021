@@ -96,7 +96,7 @@ jobs:
           name: scan back-end dependencies
           command: |
             cd backend
-            npm audit fix
+            #npm audit fix
             npm audit --audit-level=critical --force
             
 
