@@ -276,10 +276,10 @@ jobs:
 
             echo 'DUMP MIGRATIONS'
             echo "PWD: " $(pwd)
-            #npm run migrations >> ~/project/backend/migrations_dump.txt
+            npm run migrations >> ~/project/backend/migrations_dump.txt
 
             echo '*****************'
-            #cat migrations_dump.txt
+            cat migrations_dump.txt
 
       - run:
           name: Send migration results to memstash
