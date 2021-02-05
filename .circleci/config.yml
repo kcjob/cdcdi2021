@@ -185,7 +185,7 @@ jobs:
       - run:
           name: configure server
           command: |
-            echo NODE_ENV=development >> "backend/.env"
+            echo NODE_ENV=production >> "backend/.env"
             cd ~/project/.circleci/ansible
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople" --output text >> inventory.txt
 
