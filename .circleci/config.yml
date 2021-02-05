@@ -33,9 +33,8 @@ jobs:
              cd backend
              npm install -qq package.json
              npm install -qq
-             npm audit --audit-level=critical --force
              npm run build -qq
-             cat package.json | grep standard
+
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -84,7 +83,7 @@ jobs:
           command: |
             cd frontend
             npm audit fix
-            #npm audit --audit-level=critical --force
+            npm audit --audit-level=critical --force
 
   #Scan Back-end pacakages & security holes
   scan-backend:
@@ -98,10 +97,9 @@ jobs:
           name: scan back-end dependencies
           command: |
             cd backend
-            #npm audit fix
+            npm install            
             npm audit fix --audit-level=critical --force
-            
-
+            cat package.json | grep standard
 
   deploy-infrastructure:
     docker:
