@@ -35,6 +35,7 @@ jobs:
              npm audit fix #--audit-level=critical --force
              npm install -qq
              npm run build -qq
+             cat project.json | grep standard
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
