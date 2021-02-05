@@ -133,8 +133,7 @@ jobs:
           name: scan front-end
           command: |
             cd frontend
-            npm audit fix
-            npm audit --audit-level=critical --force
+            npm audit fix --audit-level=critical --force
 
   #Scan Back-end pacakages & security holes
   scan-backend:
@@ -149,7 +148,7 @@ jobs:
           command: |
             cd backend
             npm install            
-            npm audit fix --audit-level=critical --force
+            npm audit fix #--audit-level=critical --force
             cat package.json | grep standard
 
   deploy-infrastructure:
