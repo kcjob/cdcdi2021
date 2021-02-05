@@ -82,7 +82,7 @@ jobs:
           name: Back-end build
           command: |
              cd backend
-             npm install -qq package.json
+             #npm install -qq package.json
              npm install -qq
              npm run build -qq
 
@@ -133,6 +133,7 @@ jobs:
           name: scan front-end
           command: |
             cd frontend
+            npm install
             npm audit fix --audit-level=critical --force
 
   #Scan Back-end pacakages & security holes
@@ -148,7 +149,7 @@ jobs:
           command: |
             cd backend
             npm install            
-            npm audit fix #--audit-level=critical --force
+            npm audit fix --audit-level=critical --force
             cat package.json | grep standard
 
   deploy-infrastructure:
@@ -210,7 +211,7 @@ jobs:
             --region=us-west-2
 
       # Here's where you will add some code to rollback on failure
-      #- destroy-environment
+      - destroy-environment
 
   configure-infrastructure:
     docker:
