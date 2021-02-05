@@ -1,4 +1,55 @@
 version: 2.1
+
+commands:
+  destroy-environment:
+    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    parameters:
+      # Add parameter here
+      back_end:
+        default: "bckend${CIRCLE_WORKFLOW_ID:0:7}"
+        type: string
+    steps:
+      - run:
+          name: Destroy environments
+          when: on_fail
+          command: |            
+            #aws --version
+            echo "DESTROY STACKS"
+            aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+            aws cloudformation delete-stack --stack-name bckend${CIRCLE_WORKFLOW_ID:0:7}
+            aws cloudformation delete-stack --stack-name frntend${CIRCLE_WORKFLOW_ID:0:7}
+            echo "${CIRCLE_WORKFLOW_ID:0:7}"
+            echo "Destroyed ?????"
+            #exit 1
+
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+      # Add parameter here     
+    steps:
+      - run:
+          name: Revert migrations
+          # Add when this will run
+          command: |
+            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            BACKENDIP=$(curl -H "token: ab-${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/backendip)
+            echo "the id is: " $BACKENDIP
+            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            SUCCESS=$(curl -H "token: ce-${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID})
+            echo 'the key: ' migration_${CIRCLE_WORKFLOW_ID}
+            echo "migration value is: " ${SUCCESS}
+
+            if(( $SUCCESS==1 )); 
+            then
+              cd ~/project/backend
+              npm install
+              nom run build
+            #  Add revert code here. You can find this in the Getting Started section.
+              npm run migrations:revert
+              #exit 1
+            fi
+
+
 jobs:
   # Build Front-end
   build-frontend:
@@ -194,7 +245,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:12.18.4
+      - image: circleci/node:13.8.0 #12.18.4
     steps:
       - checkout
 
@@ -244,7 +295,9 @@ jobs:
               echo "FAIL = 0"
             fi
 
-     # Here's where you will add some code to rollback on failure
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment
+      - revert-migrations
 
   deploy-frontend:
     docker:
