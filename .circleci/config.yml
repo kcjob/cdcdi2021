@@ -276,7 +276,7 @@ jobs:
 
             echo 'DUMP MIGRATIONS'
             echo "PWD: " $(pwd)
-            npm run migrations >> ~/project/backend/migrations_dump.txt
+            #npm run migrations >> ~/project/backend/migrations_dump.txt
 
             echo '*****************'
             cat migrations_dump.txt
