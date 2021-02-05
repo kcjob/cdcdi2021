@@ -217,6 +217,7 @@ jobs:
           command: |
            cd ~/project/backend
             npm install
+            npm run build
 
             echo 'DUMP MIGRATIONS'
             echo "PWD: " $(pwd)
