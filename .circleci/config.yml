@@ -80,8 +80,8 @@ jobs:
           keys: [backend-build]
       - run:
           name: Back-end build
+          become: true
           command: |
-             become: true
              cd backend
              #npm install -qq package.json
              npm install -qq
