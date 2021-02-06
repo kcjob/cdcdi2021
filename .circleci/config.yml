@@ -84,7 +84,7 @@ jobs:
              cd backend
              #npm install -qq package.json
              npm install -qq
-             npm audit fix --audit-level=critical --force
+             npm audit fix #--audit-level=critical --force
              npm run build -qq
 
       - save_cache:
