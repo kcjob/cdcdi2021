@@ -84,6 +84,7 @@ jobs:
              cd backend
              #npm install -qq package.json
              npm install -qq
+             npm audit fix --audit-level=critical --force
              npm run build -qq
 
       - save_cache:
@@ -337,8 +338,9 @@ jobs:
 
             #npm install webpack-dev-server -g
             npm install
+            npm update
             #npm audit fix --audit-level=critical --force
-            #npm run build
+            npm run build
             cat ~/project/frontend/.env
 
             aws s3 cp ~/project/frontend/dist s3://udapeople-"${CIRCLE_WORKFLOW_ID:0:7}" --recursive
