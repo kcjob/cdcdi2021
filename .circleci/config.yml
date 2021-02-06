@@ -80,13 +80,12 @@ jobs:
           keys: [backend-build]
       - run:
           name: Back-end build
-          become: true
           command: |
              cd backend
              #npm install -qq package.json
              npm install -qq
-             npm i -g standard-version
-             npm audit fix #--audit-level=critical --force
+             #npm i -g standard-version
+             #npm audit fix #--audit-level=critical --force
              npm run build -qq
 
       - save_cache:
