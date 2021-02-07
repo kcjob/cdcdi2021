@@ -82,7 +82,7 @@ jobs:
           name: Back-end build
           command: |
              cd backend
-             #npm install -qq package.json
+             npm install -qq package.json
              npm install -qq
              #npm i -g standard-version
              #npm audit fix #--audit-level=critical --force
