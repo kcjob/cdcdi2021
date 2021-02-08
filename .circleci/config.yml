@@ -324,7 +324,7 @@ jobs:
             yum -y install tar gzip
 
 
-#            cd ~/project/frontend
+            cd ~/project/frontend
 #            apk add --no-cache nodejs
 #            apk add --no-cache npm
 #            apk add --no-cache bash
