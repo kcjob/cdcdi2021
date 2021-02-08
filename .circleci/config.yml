@@ -347,7 +347,7 @@ jobs:
             echo "${API_URL}" >> .env
             cat ~/project/frontend/.env
 
-            #npm install webpack-dev-server -g
+            npm install webpack-dev-server -g
             npm install
             npm update
             #npm audit fix --audit-level=critical --force
