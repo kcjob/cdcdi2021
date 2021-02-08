@@ -350,7 +350,7 @@ jobs:
             #npm install webpack-dev-server -g
             npm install
             npm update
-            npm audit fix --audit-level=critical --force
+            #npm audit fix --audit-level=critical --force
             npm run build
             cat ~/project/frontend/.env
 
