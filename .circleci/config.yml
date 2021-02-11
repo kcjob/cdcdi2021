@@ -313,9 +313,6 @@ jobs:
     steps:
       - checkout
 
-     # - restore_cache:
-     #     keys: [frontend-build]
-
       - run:
           name: Install dependencies
           command: |
@@ -325,11 +322,6 @@ jobs:
 
 
             cd ~/project/frontend
-#            apk add --no-cache nodejs
-#            apk add --no-cache npm
-#            apk add --no-cache bash
-#            apk add --no-cache curl
-#            pip install awscli
 
       - run:
           name: Get backend url
